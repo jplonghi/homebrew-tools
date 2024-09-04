@@ -1,0 +1,66 @@
+#!/bin/bash
+
+# Constants for macOS Keychain Service and Account names
+SERVICE_NAME="getjwttoken_service"
+USERNAME_KEY="getjwttoken_username"
+PASSWORD_KEY="getjwttoken_password"
+
+# Function to save username and password securely in macOS Keychain
+save_credentials() {
+    # Prompt for username and password securely
+    read -p "Enter your username: " username
+    read -s -p "Enter your password: " password
+    echo
+
+    # Save username in the Keychain
+    security add-generic-password -U -s "$SERVICE_NAME" -a "$USERNAME_KEY" -w "$username"
+    
+    # Save password in the Keychain
+    security add-generic-password -U -s "$SERVICE_NAME" -a "$PASSWORD_KEY" -w "$password"
+
+    echo "Credentials saved successfully."
+}
+
+# Function to retrieve credentials from macOS Keychain
+get_credentials() {
+    # Retrieve username from Keychain
+    username=$(security find-generic-password -s "$SERVICE_NAME" -a "$USERNAME_KEY" -w 2>/dev/null)
+
+    # Retrieve password from Keychain
+    password=$(security find-generic-password -s "$SERVICE_NAME" -a "$PASSWORD_KEY" -w 2>/dev/null)
+
+    # Check if credentials were found
+    if [[ -z "$username" || -z "$password" ]]; then
+        echo "Error: Credentials not found. Please run the script with -c or --config to set them up."
+        exit 1
+    fi
+}
+
+# Function to make the curl request and copy the result to the clipboard
+make_request() {
+    get_credentials
+
+    # Make the curl request with the stored credentials
+    response=$(curl -s -X POST \
+        -H "Content-Type: application/x-www-form-urlencoded" \
+        -d "username=$username&password=$password&token=true" \
+        https://apps.crengland.com/sso/v1/tickets)
+
+    # Trim the response using awk (or you can use sed or xargs)
+    trimmed_response=$(echo "$response" | awk '{$1=$1; print}')
+
+    # Copy the response to the clipboard
+    echo "$trimmed_response" | pbcopy
+
+    echo "The response has been copied to the clipboard."
+}
+
+# Check script arguments
+case "$1" in
+    -c|--config)
+        save_credentials
+        ;;
+    *)
+        make_request
+        ;;
+esac
