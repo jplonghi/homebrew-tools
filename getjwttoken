@@ -46,11 +46,8 @@ make_request() {
         -d "username=$username&password=$password&token=true" \
         https://apps.crengland.com/sso/v1/tickets)
 
-    # Trim the response using awk (or you can use sed or xargs)
-    trimmed_response=$(echo "$response" | awk '{$1=$1; print}')
-
     # Copy the response to the clipboard
-    echo "$trimmed_response" | pbcopy
+    echo -n "$response" | pbcopy
 
     echo "The response has been copied to the clipboard."
 }
