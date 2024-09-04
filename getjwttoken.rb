@@ -5,7 +5,7 @@ class Getjwttoken < Formula
     homepage "https://github.com/jplonghi/homebrew-tools"
     url "https://github.com/jplonghi/homebrew-tools/blob/main/getjwttoken"
     version "1.0.0"
-    sha256 "4b5631f44444af515ff484ef5e93dbaf6beda7a6b9266adad217b4502ea21484"
+    sha256 "55f49dc8525b786183efc53a1c626b1538f97b3bb039b4b6b0dcefb1847ce1ee"
   
     def install
       bin.install "getjwttoken"
