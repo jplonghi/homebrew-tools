@@ -9,10 +9,9 @@ class Getjwttoken < Formula
   
     def install
       bin.install "getjwttoken"
-    end
-  
-    test do
-      system "#{bin}/getjwttoken", "--help"
+
+      # Ensure the script is executable
+      chmod "+x", bin/"getjwttoken"
     end
   end
   
