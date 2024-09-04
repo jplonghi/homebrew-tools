@@ -1,7 +1,7 @@
 # File: getjwttoken.rb
 
 class Getjwttoken < Formula
-    desc "A tool to securely manage and retrieve JWT tokens"
+    desc "A tool to securely retrieve JWT tokens"
     homepage "https://github.com/jplonghi/homebrew-tools"
     url "https://github.com/jplonghi/homebrew-tools/archive/refs/tags/v1.0.tar.gz"
     version "1.0.0"
